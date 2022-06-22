@@ -1,3 +1,0 @@
-# Hadoop
-# Hadoop
-# learn
