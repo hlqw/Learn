@@ -11,12 +11,15 @@
       {{ index }}:{{ item }}
     </button>
     <div>你选择了【{{ selectGirls ? selectGirls : "大脚" }}】美女为你服务</div>
+    <button @click="overAction">点餐完成</button>
+    <p>{{overText}}</p>
   </div>
 </template>
 
 <script lang="ts">
 import { ref, reactive, toRefs } from "vue";
 import HelloWorld from "./components/HelloWorld.vue";
+import {watch} from 'vue'
 interface DataProps {
   girls: string[];
   selectGirls: string;
@@ -36,13 +39,20 @@ export default {
         data.selectGirls = data.girls[index];
       },
     });
-    // const girls = ref(["大脚","刘英","晓红"])
-    const selectGirls = ref("");
-    const selectFun = (index: number) => {
-      data.selectGirls = data.girls[index];
-    };
+  const overText = ref('红浪漫')
+  const overAction = () =>{
+    overText.value = '点单完成|' + overText.value
+    // 修改标题
+    // document.title = overText.value  //不是响应式
+  };
+  watch([overText,()=> data.selectGirls],(newValue,oldValue) =>{
+    console.log(`new--->${newValue}`);
+    console.log(`old--->${oldValue}`);
+    document.title = newValue[1]
+     
+  });
     return {
-      ...toRefs(data),
+      ...toRefs(data),overText,overAction
     };
   },
 };
