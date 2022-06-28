@@ -1,24 +1,12 @@
 <template>
   <div>
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome HL" />
-    <h1>欢迎来到红浪漫洗浴中心</h1>
-    <button
-      v-for="(item, index) in girls"
-      :key="index"
-      @click="selectFun(index)"
-    >
-      {{ index }}:{{ item }}
-    </button>
-    <div>你选择了【{{ selectGirls ? selectGirls : "大脚" }}】美女为你服务</div>
-    <button @click="overAction">点餐完成</button>
-    <p>{{overText}}</p>
+    <h1 class="text-cyan-400">hahhaha</h1>
   </div>
 </template>
 
 <script lang="ts">
 import { ref, reactive, toRefs } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+// import HelloWorld from "./components/HelloWorld.vue";
 import {watch} from 'vue'
 interface DataProps {
   girls: string[];
@@ -29,7 +17,7 @@ interface DataProps {
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    // HelloWorld,
   },
   setup() {
     const data: DataProps = reactive({

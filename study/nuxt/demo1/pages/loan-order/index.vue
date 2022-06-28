@@ -126,6 +126,7 @@ export default {
       border-radius: 5px;
       margin-left: 15px;
       // margin-top: 10px;
+      margin:10px 15px 10px 15px;
       transform: translateY(10px);
       display: flex;
       .left{
