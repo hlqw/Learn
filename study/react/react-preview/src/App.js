@@ -10,15 +10,30 @@ class App extends Component {
             list:['吃饭','逛街']
         }
     }
+    componentWillMount(){
+        console.log('componentWillMount ---- 组件将要被挂载到页面');
+    }
+    componentDidMount(){
+        console.log('componentDidMount ---- 组件已经被挂载到页面上');
+    }
+    shouldComponentUpdate(){ 
+        console.log('shouldComponentUpdate ---- 是否决定组件更新');
+        return true   
+    }
+    componentWillUpdate(){
+        console.log('componentWillUpdate ---- 组件将要更新');
+    }
+    componentDidUpdate(){
+        console.log('componentDidUpdate ---- 组件已经更新');
+    }
+
     inputChange(e){
         // console.log(this);
        this.setState({
         // inputValue :e.target.value
-        inputValue :this.input
-
+        inputValue :this.input.value
        })
-
-    }
+    } 
     addList(){
         this.setState({
             list:[...this.state.list,this.state.inputValue],
@@ -33,6 +48,7 @@ class App extends Component {
         })
     }
     render() {
+        console.log('render ---- 组件编译中');
         return (
             <Fragment>
                 {/* <List></List> */}
