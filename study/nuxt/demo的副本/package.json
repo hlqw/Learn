@@ -1,0 +1,14 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "实习生练习项目",
+  "author": "lijun.zhu@huijie-inc.com",
+  "private": true,
+  "scripts": {
+    "predev": "node ./../../scripts/prebuild.js",
+    "dev": "nuxt -p 4567",
+    "build": "nuxt generate",
+    "prebuild": "rimraf dist && deps-check && node ./../../scripts/prebuild.js",
+    "generate": "nuxt generate"
+  }
+}

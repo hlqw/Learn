@@ -90,6 +90,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.detail{
+  background-color: #fff;
+}
 .container {
   overflow-x: hidden;
   width: 375px;
