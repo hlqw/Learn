@@ -11,20 +11,20 @@ class App extends Component {
         }
     }
     componentWillMount(){
-        console.log('componentWillMount ---- 组件将要被挂载到页面');
+        console.log('componentWillMount ---- 父组件将要被挂载到页面');
     }
     componentDidMount(){
-        console.log('componentDidMount ---- 组件已经被挂载到页面上');
+        console.log('componentDidMount ---- 父组件已经被挂载到页面上');
     }
     shouldComponentUpdate(){ 
-        console.log('shouldComponentUpdate ---- 是否决定组件更新');
+        console.log('shouldComponentUpdate ---- 父组件是否决定组件更新');
         return true   
     }
     componentWillUpdate(){
-        console.log('componentWillUpdate ---- 组件将要更新');
+        console.log('componentWillUpdate ---- 父组件将要更新');
     }
     componentDidUpdate(){
-        console.log('componentDidUpdate ---- 组件已经更新');
+        console.log('componentDidUpdate ---- 父组件已经更新');
     }
 
     inputChange(e){

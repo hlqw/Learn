@@ -6,6 +6,23 @@ class List extends Component{
         super(props)
         this.handleClick = this.handleClick.bind(this)
     }
+    
+    componentWillReceiveProps(){
+        console.log('componentWillReceiveProps ---- 子组件将要接受参数');
+    }
+    shouldComponentUpdate(nextProps,nextState){
+        if(nextProps.content !== this.props.content){
+            return true
+        }else{
+            return false
+        }
+        console.log('shouldComponentUpdate ---- 子组件决定是否更新');
+        return true
+    }
+    componentWillUnmount(){
+        console.log('componentWillUnmount ---- 子组件将要被卸载');
+    }
+    
     render(){
         return (
             <li onClick={this.handleClick}>{this.props.content}</li>
