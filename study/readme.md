@@ -52,3 +52,28 @@ watchEffect(fn)相当于 watch(fn,fn,{immediate:true})
 1. 区分错误类型，错误类型分为 ”接口异常“ 和 “代码逻辑异常” 
 2. 根据不同的类型错误做响应的处理。 “接口异常“是我们前端请求后端接口时发生的错误，可能是请求失败，也可能是请求获取了服务器响应，但是返回的是错误状态。以Axios为例，这类异常我们可以对Axios进行封装，在拦截器中统一处理整个应用中请求的错误。“代码逻辑错误”是我们前端代码中存在逻辑中的错误造成的异常，我们可以使用全局错误处理函数app.config.app.config.errorHandler收集错误。
 3. 收集到错误之后，需要统一处理这些异常。如果是请求错误：需要上报接口信息，参数，状态码等；如果是前端逻辑错误，获取错误名称和详情即可。
+
+
+
+# npm run xxx 这过程中发生了什么？
+1. 先去package.json 中寻找 script 的xxx命令，然后执行 xxx命令. 
+例如： npm run serve === vue-cli-service serve 
+2. 为什么不用 vue-cli-service serve 执行？
+- 一是 为了方便，简短
+- 二是 因为不存在 vue-cli-service 这个命令，会报错。
+3. 为什么 npm run xxx 不会报错呢？
+- 在安装依赖时，例如 npm i @vue/cli service 时，就会在 node_modules/.bin 目录创建好vue-vli-servive为名的几个可执行文件了。
+- npm run xxx 时 npm会去./node_modules/.bin 找到几个vue-vli-service文件来执行。 相当于执行了 
+./node_modules/.bin/vue-cli-service server(最后的serve作为参数传入)
+4. .bin目录下的文件表示软连接，那么bin下面这些软连接文件是哪里来的呢？它又怎么知道软连接执行哪里的呢？
+- 我们可以在新建的项目中搜索vue-cli-service ，可以在package-lock.json 中看到:
+  "vue-cli-service":"bin/vue-cli-service.js".当我们在npm i 整个新建的项目时，npm 将
+  "bin/vue-cli-service.js" 作为 bin的 声明了。
+- 所以在 npm install 时，npm读到该配置了，就将该文件软连接到 node_modules/.bin下。而且npm还会自动将
+   node_modules/.bin 加入 $PATH,这样就可以直接作为命令运行程序了。
+
+
+# moment 时间格式化
+    import moment from 'moment';
+    let m1 =moment()
+    console.log(moment(m1).format('YYYY.MM.DD HH:mm:ss')); //2022.07.14 10:51:36
