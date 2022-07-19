@@ -77,3 +77,7 @@ watchEffect(fn)相当于 watch(fn,fn,{immediate:true})
     import moment from 'moment';
     let m1 =moment()
     console.log(moment(m1).format('YYYY.MM.DD HH:mm:ss')); //2022.07.14 10:51:36
+
+# HTML语义化
+1. 让人更容易读懂
+2. 

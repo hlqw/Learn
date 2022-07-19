@@ -19,16 +19,17 @@
 // }
 
 // 2. map 降低时间复杂度
-// const two_num =(nums,target) =>{
-//     let map = new Map()
-//     let len = nums.length
-//     for(let i=0;i<len;i++){
-//         if(map.has(target-nums[i])){
-//             return [map.get(target-nums[i]),i]
-//         }
-//         map.set(nums[i],i)
-//     }
-//     return []
-// }
-// let arr = [2,7,9,5]
-// console.log(two_num(arr,9));
+const two_num = (nums, target) => {
+  let map = new Map();
+  let len = nums.length;
+  for (let i = 0; i < len; i++) {
+    if (map.has(target - nums[i])) {
+      return [map.get(target - nums[i]), i];
+    }
+    map.set(nums[i], i);
+  }
+  return [];
+};
+let arr = [2, 7, 9, 5];
+console.log(two_num(arr, 9));
+

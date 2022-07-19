@@ -45,7 +45,6 @@ export default {
     })
     const diffObjectByKeys = (obj1,obj2)=>{
       let isEqual = true
-      console.log(obj1,obj2);
        for(let key in obj1){
         let v = obj1[key]   // red s miande
         if(obj2[key] && obj2[key] === v){
@@ -66,7 +65,7 @@ export default {
           state.json2 = res.data.json2;
           console.log(res.data);
 
-                state.types = Object.keys(state.json2[0]); //['color','type','mainliao','price']
+      state.types = Object.keys(state.json2[0]); //['color','type','mainliao','price']
       for (let i = 0; i < state.types.length; i++) {
         if (!state.json1[i]) return;
         let propName = state.types[i];
