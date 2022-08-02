@@ -9,11 +9,6 @@ function b() {
   console.log("testBBBBBBB");
 }
 
-// let p = a().then((res) => {
-//   return b();
-// });
-// console.log(p);
-
 const PENDING = "pending";
 const RESOLVED = "resloved";
 const REJECTED = "rejected";
@@ -47,41 +42,43 @@ class Promise_hander {
   }
   then(onFufilled, onRejected) {
     if (typeof onFufilled === "function" ? onFufilled : (v) => v)
-    if (
-        typeof onRejected === "function"? onRejected: (r) => {
+      if (
+        typeof onRejected === "function"
+          ? onRejected
+          : (r) => {
               throw r;
             }
-    )
-      var thenPromise = new Promise_hander((resolve, reject) => {
-        const resolvePromise = cb => {
-          try {
-            const x = cb(this.value)
-            if (x === thenPromise) {
-              throw new Error('不能返回自身')
+      )
+        var thenPromise = new Promise_hander((resolve, reject) => {
+          const resolvePromise = (cb) => {
+            try {
+              const x = cb(this.value);
+              if (x === thenPromise) {
+                throw new Error("不能返回自身");
+              }
+              if (x instanceof Promise_hander) {
+                x.then(resolve, reject);
+              } else {
+                resolve(x);
+              }
+            } catch (error) {
+              reject(error);
+              throw new Error(error);
             }
-            if (x instanceof Promise_hander) {
-              x.then(resolve,reject)
-            } else {
-              resolve(x)
-            }
-          } catch (error) {
-            reject(error)
-            throw new Error(error)
+          };
+          if (this.state === PENDING) {
+            this.resolvedCallBack.push(resolvePromise.bind(this, onFufilled));
+            this.rejectedCallBack.push(resolvePromise.bind(this, onRejected));
           }
-        }
-        if (this.state === PENDING) {
-          this.resolvedCallBack.push(resolvePromise.bind(this,onFufilled));
-          this.rejectedCallBack.push(resolvePromise.bind(this,onRejected));
+          if (this.state === RESOLVED) {
+            resolvePromise(onFufilled);
           }
-      if (this.state === RESOLVED) {
-        resolvePromise(onFufilled)
-      }
-      if (this.state === REJECTED) {
-        resolvePromise(onRejected);
-      }
-      })
-    
-    return thenPromise
+          if (this.state === REJECTED) {
+            resolvePromise(onRejected);
+          }
+        });
+
+    return thenPromise;
     // if (this.state === PENDING) {
     //     this.resolvedCallBack.push(onFufilled);
     //     this.rejectedCallBack.push(onRejected);
@@ -105,19 +102,19 @@ const p = new Promise_hander((resolve, reject) => {
 p.then(
   (res) => {
     console.log(res, "444444");
-    return res
+    return res;
   },
   (err) => {
     console.log(err);
   }
-).then(res => {
-  console.log(res,'5555');
-})
+).then((res) => {
+  console.log(res, "5555");
+});
 
 // 链式调用 输出300
 // const p = new Promise_hander((resolve, reject) => {
 //   resolve(100)
 // })
 // let p1 =  p.then(res => new Promise_hander((resolve, reject) => resolve(3 * res)))
- 
+
 // let p5 = p1.then(res => console.log(res))
