@@ -54,3 +54,97 @@ Map对象的遍历方法：
 4.  box-shadow   height: 1px; background: none;  box-shadow: 0 0.5px 0 #000;
 
 # ES6新增特性
+
+# 盒模型(由content、padding、border、margin构成)
+- 标准盒模型：只包含content
+- IE盒模型： content + padding + border
+
+# CSS选择器和优先级
+
+# 重排和重绘
+- 重排：无论通过什么方式影响了元素的集合信息（元素在视口内的位置和尺寸大小），浏览器需要重新计算元素在视口内的几何属性，这个过程叫做重排。
+- 重绘：通过构造渲染树和重排（回流）阶段，我们知道了哪些节点是可见的，以及可见节点的样式和具体的几何信息（元素在视口内的位置和尺寸大小），接下来就可以将
+渲染树的每个节点都转化为屏幕上的实际像素，这个阶段叫做重绘。
+如何减少重拍和重绘？
+1. 最小化重绘和重排：比如样式集中改变，使用添加新样式类名 .class 或 cssText
+2. 批量操作DOM，比如读取某元素offsetWidth属性存到一个临时变量，再去使用。
+3. 使用 absolute 或  fixed 使元素脱离文档流
+4. 开启GPU加速，利用css属性transform、will-change等，比如改变元素位置，我们使用translate会比使用绝对定位改变其left、top等来的高效。因为它不会
+触发重排或重绘IU，transform使浏览器元素创建一个GPU图层，这使得动画元素在一个独立的的层中进行渲染。当元素的内容没有发生改变，就没有必要进行重绘。
+
+
+
+# 深拷贝
+1. 用 new obj.constructor() 构造函数新建一个空对象而不用{}或者[]，这样可以保持原型链的继承。
+2. 用obj.hasOwnProperty(key)来判断属性是否来自原型链上，因为for...in..也会遍历其原型链上的可枚举属性。
+
+# 0.1 + 0.2 !== 0.3,讲讲 IEEE754，如何让其相等？
+原因：
+1. 进制转换：js在数字计算的时候，0.1和0.2都会被转成二进制后无限循环，但是js采用的IEEE754二进制浮点运算，最大可以存储53位有效数字，于是大于53位后面的全部会被截掉，将导致精度缺失。
+2. 对阶运算“由于指数位数不相同，运算时需要对阶运算，阶小的尾数要根据差来右移（0舍1入），尾数位移时可能会发生数丢失的情况，影响精度。
+
+
+# web存储
+- cokkie：存储大小为4KB、http请求时需要发送到服务端，增加请求数量。只能用document.cokkie = '...' 来修改，太过简陋。
+- localStorage、sessionStorage
+ 1. HTML5专门为存储来设计的，最大可存5M。
+ 2. API简答易用，setItem getItem
+ 3. 不会随着http请求被发送到服务端。
+
+它们的区别：
+1. localStorage 数据会永久存储，除非代码删除或者手动删除
+2. sessionStorage 数据只存在于当前会话，浏览器关闭则清空。
+3. 一般用localStroage多一些
+
+
+# 状态码
+- 1xx  服务器收到请求
+- 2xx  请求成功，如200
+- 3xx  重定向，如302
+- 4xx  客户端错误，如404
+- 5xx  服务端错误。如500
+
+
+# 缓存策略（强制缓存、协商缓存）
+
+
+# GET 和 POST 的区别
+1. 从缓存的角度，GET请求会被浏览器主动缓存下来，留下历史记录，而POST默认不会。
+2. 从编码的角度，GET只能进行URL编码，只能接收ASCLL字符，而POST没有限制。
+3. 从参数的角度，GET一般放在URL，因此不安全，POST放在请求体中，更适合传输敏感信息。
+4. 从幂等性的角度，GET是幂等的，而POST不是。（幂等表示执行相同的操作，结果也是相等的）。
+5. TCP的角度，GET请求会把请求报文一次性发出去，而POST会分为两个TCP数据包，首先发header部分，如果服务器响应100（continue），然后发body部分。（火狐浏览器除外，它的POST请求只发一个TCP包）
+
+# React生命周期
+1. 初始化阶段（发生在constructor中的内容，在constructor中进行state、props的初始化，在这个阶段改state，不会执行更新阶段的生命周期，可以对state赋值）
+2. 挂载阶段
+  - componentWillMount 发生在render函数之前，还没有挂载Dom
+  - render
+  - componentDidMount  发生在render函数之后，已经挂载DOM
+3. 更新阶段
+  - componentWillReceiveProps（nextProps，nextState） 这个生命周期主要为我们提供对props发生改变的监听，如果你需要在props发生改变后，相应改变组件的一些state。在这个方法中改变state不会二次渲染，而是直接合并state
+  - shouldComponentUpdate(nextProps,nextState)
+  - componentWillUpdate(nextProps,nextState)
+  - componentDidUpdate(preProps,preState )
+
+4. 卸载阶段
+
+
+# 前段性能优化
+1. 减少HTTP请求
+2. 将CSS放在文件头部，JavaScript文件放在底部
+3. 减少重排重绘
+4. 图片优化
+5. 压缩文件
+6. 善用缓存，不重复加载相同资源
+7. 使用事件代理
+8. 静态资源使用CDN
+9. 使用服务器端渲染
+10. 防抖节流
+11. vue组件中使用keep-alive保存组件状态
+12. webpack按需加载代码--Tree-Shaking
+13. 使用Web Works
+14. Vue首屏优化
+
+
+

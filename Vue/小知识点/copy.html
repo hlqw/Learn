@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    hahahahahahahha
+    <script>
+       document.body.oncopy = e =>{
+        console.log(window.getSelection().toString(),555)
+			let copyMsg = window.getSelection().toString()
+			//把值设置到剪贴板中，方便paste事件触发去拿
+			e.clipboardData.setData("Text", copyMsg);
+    }
+    </script>
+</body>
+</html>
