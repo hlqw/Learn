@@ -54,6 +54,14 @@ Map对象的遍历方法：
 4.  box-shadow   height: 1px; background: none;  box-shadow: 0 0.5px 0 #000;
 
 # ES6新增特性
+1. 块级作用域（let，const）
+2. 箭头函数
+3. 函数默认值（允许对函数参数设置默认值）
+4. 模版语法和分隔符 (`...`)
+5. 字面量增强（可以简写去掉function，对象中的属性可以通过[]来定义非字符串的变量）
+6. 解构（数组解构[...arr],对象解构 var {name,age} = person）
+7. Symbol、Set、WeakSet、Map、WeakMap
+8. promise、trim、includes、Arrat.from、Object.assign(合并一个或多个对象，所有参数直接合并到第一个参数，返回合并后的对象)、Object.keys、      Object.entries
 
 # 盒模型(由content、padding、border、margin构成)
 - 标准盒模型：只包含content
@@ -146,5 +154,24 @@ Map对象的遍历方法：
 13. 使用Web Works
 14. Vue首屏优化
 
+# 防抖和节流的区别
+防抖：如果事件被频繁触发，防抖保证只有一次触发生效，前面N多次触发都会被忽略。
+节流：如果事件被频繁触发，节流能减少时间触发的频率，因此，节流是有选择性的执行一部分事件。
+
+应用场景：防抖： 输入框在用户输入完成之后再执行后续操作。用户没输入完的时候不操作。
+        节流： 鼠标不断触发某事件时，只在单位时间内触发一次。
 
 
+# Promise 解决地狱回调的问题；async/await 使用，异步过程同步化；
+1. Promise是异步微任务，解决了异步多层嵌套回调的问题，让代码的可读性更高，更容易维护 Promise使用
+2. Promise是ES6提供的一个构造函数，可以使用Promise构造函数new一个实例，Promise构造函数接收一个函数作为参数，这个函数有两个参数，分别是两个函数 `resolve`和`reject`，`resolve`将Promise的状态由等待变为成功，将异步操作的结果作为参数传递过去；`reject`则将状态由等待转变为失败，在异步操作失败时调用，将异步操作报出的错误作为参数传递过去。
+3. 实例创建完成后，可以使用`then`方法分别指定成功或失败的回调函数，也可以使用catch捕获失败，then和catch最终返回的也是一个Promise，所以可以链式调用
+Promise的特点：
+1. 对象的状态不受外界影响
+2. 一旦状态改变，就不会再变，任何时候都可以得到这个结果。
+3. resolve 方法的参数是then中回调函数的参数，reject 方法中的参数是catch中的参数
+4. then 方法和 catch方法 只要不报错，返回的都是一个fullfilled状态的promise
+
+- async/await 是ES7提出的基于Promise的解决异步的最终方案
+async 是一个加在函数前的修饰，被async定义的函数会默认返回一个promise对象resolve的值。因此对async函数可以直接then，返回的值就是then方法传入的值。
+async/await使得异步代码看起来像同步代码。
