@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #box{
+            width: 100px;
+            height: 100px;
+            background: red;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+    <script>
+        let box = document.getElementById('box')
+        console.log(box);
+        let num = 0
+        function animation(){
+            if(num < 1000){
+                num++
+                box.style.left = num + 'px'
+                requestAnimationFrame(animation)
+            }else{
+                // clearInterval(timer)
+                cancelAnimationFrame()
+            }
+        }
+        // let timer = setInterval(animation)
+        let raID = requestAnimationFrame(animation);
+    </script>
+</body>
+</html>

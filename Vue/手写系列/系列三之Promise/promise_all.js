@@ -20,8 +20,7 @@ const PromiseAll = (iterator) => {
     let data = []
     return new Promise((resolve, reject) => {
         for (let i = 0; i < len; i++){
-            promises[i]
-                .then((res) => {
+            promises[i].then((res) => {
                 data[i] = res
                 if (++index === len) {
                     resolve(data)

@@ -40,3 +40,7 @@ let pay = once(function (money) {
 // pay(5);
 // pay(5);
 
+let intNum = 10000.00
+let c = intNum.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+console.log(intNum.toString());
+console.log(c+'.00');
