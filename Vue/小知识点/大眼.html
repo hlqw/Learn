@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #111;
+      perspective: 1000px;
+      --c-eyeSocket: rgb(41, 104, 217);
+      --c-eyeSocket-outer: #02ffff;
+      --c-eyeSocket-outer-shadow: transparent;
+      --c-eyeSocket-inner: rgb(35, 22, 140);
+
+    }
+    .eyeSocket{
+      position: absolute;
+      left: calc(50% - 75px);
+      top: calc(50% - 75px);
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 4px solid rgb(41,104,217);
+      z-index: 1;
+      border: 4px solid var(--c-eyeSocket);
+      box-shadow: 0px 0px 50px var(--c-eyeSocket-outer-shadow); /* 当生气时添加红色外发光，常态则保持透明 */
+      transition: border 0.5s ease-in-out, box-shadow 0.5s ease-in-out; /* 添加过渡效果 */
+
+    }
+    .eyeSocket::after,
+    .eyeSocket::before{
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      border-radius: 50%;
+      box-sizing: border-box;
+      transition: all 0.5s ease-in-out; /* 添加过渡效果 */
+    }
+    .eyeSocket::before{
+      width: calc(100% + 20px);
+      height: calc(100% + 20px);
+      border: 6px solid #02ffff;
+      border: 6px solid var(--c-eyeSocket-outer);
+    }
+    .eyeSocket::after{
+      width: 100%;
+      height: 100%;
+      border: 4px solid rgb(35, 22, 140);
+      box-shadow: inset 0px 0px 30px rgb(35, 22, 140);
+      border: 4px solid var(--c-eyeSocket-inner);
+      box-shadow: inset 0px 0px 30px var(--c-eyeSocket-inner);
+    }
+    #eyeball{
+      width: 100%;
+      height: 100%;
+    }
+    .eyeSocketSleeping {
+    animation: sleeping 6s infinite;
+}
+
+@keyframes sleeping {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    } 
+}
+
+  </style>
+</head>
+<body>
+  <div class="eyeSocket eyeSocketSleeping" id="bigEye">
+    <div id="eyeball"></div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+  <script>
+// 画眼球
+let ballColor = 'transparent'; //透明
+let eyeball = document.getElementById('eyeball'); // 获取eyeball元素
+let eyeballChart = echarts.init(eyeball); // 初始化画布
+let bigEye = document.getElementById('bigEye')
+let leftRotSize = 0; // 旋转角度
+let ballSize = 0;
+let rotTimer;
+let isSleep = true;
+bigEye.addEventListener('click',()=>{
+  if(!isSleep) return
+  clickToWeakUp()
+})
+bigEye.addEventListener('webkitAnimationEnd', () => {
+  new Promise(res => {
+    clearInterval(rotTimer);
+    rotTimer = setInterval(() => {
+      getEyeballChart()
+      ballSize > 0 && (ballSize -= 0.5);
+      leftRotSize === 360 ? (leftRotSize = 0) : (leftRotSize += 0.1);
+      if (ballSize === 0) {
+        clearInterval(rotTimer);
+
+        res();
+      }
+    }, 10);
+  }).then(() => {
+    eyeFilter.style.opacity = '0'
+    eyeFilter.className = bigEye.className = 'eyeSocket';
+    setNormal();
+    document.body.addEventListener('mousemove', focusOnMouse);
+    rotTimer = setInterval(() => {
+      getEyeballChart()
+      ballSize <= 12 && (ballSize += 0.1);
+      leftRotSize === 360 ? (leftRotSize = 0) : (leftRotSize += 0.1);
+    }, 10);
+  })
+})
+
+function focusOnMouse(e) {
+    {
+        // 视口尺寸，获取到整个视口的大小
+        let clientWidth = document.body.clientWidth;
+        let clientHeight = document.body.clientHeight;
+        // 原点，即bigEye中心位置，页面中心
+        let origin = [clientWidth / 2, clientHeight / 2];
+        // 鼠标坐标
+        let mouseCoords = [e.clientX - origin[0], origin[1] - e.clientY];
+		// 旋转角度
+        let eyeXDeg = mouseCoords[1] / clientHeight * 80; // 这里的80代表的是最上下边缘大眼X轴旋转角度
+        let eyeYDeg = mouseCoords[0] / clientWidth * 60;
+        bigEye.style.transform = `rotateY(${eyeYDeg}deg) rotateX(${eyeXDeg}deg)`;
+        eyeball.style.transform = `translate(${eyeYDeg / 1.5}px, ${-eyeXDeg / 1.5}px)`;
+    }
+}
+
+//唤醒
+function clickToWeakUp(){
+  isSleep = false
+  bigEye.className = 'eyeSocket'
+  setAngry()
+  clearInterval(rotTimer)
+  rotTimer = setInterval(()=>{
+    getEyeballChart()
+    ballSize  <=12 && (ballSize +=0.1)
+    leftRotSize === 360 ? (leftRotSize =0) : (leftRotSize +=0.1)
+    },10)
+}
+function setAngry(){
+  document.body.style.setProperty('--c-eyeSocket', 'rgb(255,187,255)');
+    document.body.style.setProperty('--c-eyeSocket-outer', 'rgb(238,85,135)');
+    document.body.style.setProperty('--c-eyeSocket-outer-shadow', 'rgb(255, 60, 86)');
+    document.body.style.setProperty('--c-eyeSocket-inner', 'rgb(208,14,74)');
+    ballColor = 'rgb(208,14,74)';
+}
+function setNormal() {
+    document.body.style.setProperty('--c-eyeSocket', 'rgb(41, 104, 217)');
+    document.body.style.setProperty('--c-eyeSocket-outer', '#02ffff');
+    document.body.style.setProperty('--c-eyeSocket-outer-shadow', 'transparent');
+    document.body.style.setProperty('--c-eyeSocket-inner', 'rgb(35, 22, 140)');
+    ballColor = 'rgb(0,238,255)';
+}
+
+
+
+function getEyeballChart() {
+    eyeballChart.setOption({
+        series: [
+            {
+                type: 'gauge', // 使用仪表盘类型
+                radius: '-20%', // 采用负数是为了让分割线从内向外延伸
+                clockwise: false,
+                startAngle: `${0 + leftRotSize * 5}`, // 起始角度
+                endAngle: `${270 + leftRotSize * 5}`, // 结束角度
+                splitNumber: 3, // 分割数量，会将270度分割为3份，所以有四根线
+                detail: false,
+                axisLine: {
+                    show: false,
+                },
+                axisTick: false,
+                splitLine: {
+                    show: true,
+                    length: ballSize, // 分割线长度
+                    lineStyle: {
+                        shadowBlur: 20, // 阴影渐变
+                        shadowOffsetY: '0',  
+                        width: 4, // 分割线宽度
+                        shadowColor: ballColor, // 把眼睛的眼影颜色设为变量控制
+                        color: ballColor,
+                    }
+                },
+                axisLabel: false
+            },
+            {
+                type: 'gauge',
+                radius: '-20%',
+                clockwise: false,
+                startAngle: `${45 + leftRotSize * 5}`, // 起始角度
+                endAngle: `${315 + leftRotSize * 5}`, 
+                splitNumber: 3,
+                detail: false,
+                axisLine: {
+                    show: false,
+                },
+                axisTick: false,
+                splitLine: {
+                    show: true,
+                    length: ballSize,
+                    lineStyle: {
+                        shadowBlur: 20,
+                        shadowOffsetY: '0',
+                        width: 4,
+                        shadowColor: ballColor, // 把眼睛的眼影颜色设为变量控制
+                        color: ballColor,
+                    }
+                },
+                axisLabel: false
+            }
+        ]
+    })
+}
+
+function toSleep(){
+  clearTimeout(rotTimer);
+  console.log(leftRotSize,5555);
+  rotTimer = setInterval(()=>{
+    getEyeballChart()
+    if(ballSize > 0){
+      ballSize -=0.1
+    }else{
+      bigEye.className = 'eyeSocket eyeSocketSleeping'; // 眼球消失后添加呼吸
+    }
+    leftRotSize === 360 ? (leftRotSize = 0) : (leftRotSize += 0.1);
+  },10)
+}
+// getEyeballChart();
+// toSleep()
+
+  </script>
+</body>
+</html>

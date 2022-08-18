@@ -177,6 +177,11 @@ Promise的特点：
 async 是一个加在函数前的修饰，被async定义的函数会默认返回一个promise对象resolve的值。因此对async函数可以直接then，返回的值就是then方法传入的值。
 async/await使得异步代码看起来像同步代码。
 
+- promise的缺点
+1. 无法取消Promise，一旦新建它就会立即执行，无法中途取消
+2. 如果不设置回调函数，promise内部抛出的错误，不会反应到外部
+3. 当处于pending状态时，无法得知目前进展到哪一个阶段 （刚刚开始还是即将完成 ）
+
 # v-for 和 v-if的优先级谁更高？
  1. 实践中不应该把v-for和v-if放一起
  2. 在vue2中，v-for的优先级高于v-if，把它们放在一起，输出的渲染函数可以看出会先执行循环再判断条件，哪怕我们只渲染列表中的一小部分元素，也得在每次渲染的时候遍历整个列表，这会比较浪费；另外需要注意的是在vue3中则完全相反，v-if的优先级高于v-for，所以v-if执行时，它调用的变量还不存在，就会导致异常。
@@ -201,5 +206,44 @@ async/await使得异步代码看起来像同步代码。
  1. window.onload(当文档内容完全加载完成会触发该事件(包括图像、脚本文件、CSS文件等)，就调用的处理函数。)  
  2. window.onresize(调整窗口大小加载事件，当触发时就调用的处理函数)   绑定方式： window.onresize = function(){} 或者 window.addEventListener('resize',function(){})
 
- - 常见方法
- 1. 
+
+# box-sizing: content-box|border-box|inherit
+- content-box: 设置了元素宽100px，那么任何的边框和内边距的宽度都会被算到最后绘制出来的元素宽度中（设置的宽度就是元素宽度，不包含边框和内边距的宽度）（标准盒模型）
+- border-box：  设置的边框和内边距的宽度都包含在content中。（怪异盒模型）
+
+# DOM事件流 （捕获和冒泡）
+-  DOM事件的级别
+1. DOM0的写法： element.onclick = function(){}
+2. DOM1的写法： element.addEventListener('click',function(){},false)
+3. DOM3的写法： element .addEventListener('keyup',function(){},false) 增加了很多事件类型，比如鼠标事件，键盘事件等。
+
+- DOM事件流
+讲的就是浏览器在于当前页面做交互时，这个事件是怎么传递到页面上的。
+
+- 完整的事件流，分三个阶段
+捕获：从window对象传到目标元素
+目标阶段： 事件通过捕获，到达目标元素，这个阶段就是目标阶段。
+冒泡： 从目标元素传到window对象。
+
+说明：捕获阶段，事件依次传递的顺序是：window --> document --> html--> body --> 父元素、子元素、目标元素。
+
+- Evevt对象方法
+1. event.preventDefault() // 阻止默认事件（比如给<a>标签绑定了click事件，此时，如果给<a>设置了这个方法，就阻止了链接的默认跳转）
+2. event.stopPropagation() || event.cancelBubble //阻止冒泡事件
+3. event。stopImmediateProgation（） //设置优先级
+4. event.currentTarget  // 事件委托 （指的是父元素，在父元素上绑定，影响子元素，操作一次dom，提高性能）
+   event.target       // 当前被点击的元素，在事件委托中，指的是子元素
+                     // 事件委托的核心原理：给父节点添加侦听器， 利用事件冒泡影响每一个子节点
+
+
+# 解决样式冲突
+1. 细化选择符
+2. 再写一次选择器名
+3. 改变CSS样式表中的顺序
+4. 主动提升优先级（不建议）
+
+
+# Vue2中组件为什么只能有一个根节点，为什么Vue3组件可以有多个根节点？
+1. 在vue2中之所以这么做是因为vdom是一颗单根树形结构，patch方法在遍历的时候从根节点开始遍历，它要求只有一个根结点，组件也会转换为一个vdom，自然满足这个要求。
+2. 在vue3中之所以可以有多个节点，是因为引入Fragment的概念，这是一个抽象的节点，如果发现组件有多个根，就创建一个Fragment节点，把多个根节点作为它的children，
+   将来patch的时候，如果发现是一个Fragment节点，则直接遍历children创建或更新。
