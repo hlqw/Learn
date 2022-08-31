@@ -247,3 +247,23 @@ async/await使得异步代码看起来像同步代码。
 1. 在vue2中之所以这么做是因为vdom是一颗单根树形结构，patch方法在遍历的时候从根节点开始遍历，它要求只有一个根结点，组件也会转换为一个vdom，自然满足这个要求。
 2. 在vue3中之所以可以有多个节点，是因为引入Fragment的概念，这是一个抽象的节点，如果发现组件有多个根，就创建一个Fragment节点，把多个根节点作为它的children，
    将来patch的时候，如果发现是一个Fragment节点，则直接遍历children创建或更新。
+
+
+
+# react的hook钩子函数
+1. useState 
+2. useEffect  是componentDidmount、componentDidUpdate、componentWillMount 三个生命周期的结合，在DOM更新之后调用。可以选择需要清除的effect和不需要
+   清除的effect。 需要清除的effect函数 需要返回一个函数，在effect函数调用完成之后自动调用返回函数 （多用在订阅外部数据源，需要清除数据防止内存泄露）
+  - useEffect（（）=>{},[xxx] ） 第一个参数为更新时调用的函数，第二个参数则是提高性能，只有在第二个参数 改变时才会调用useEffect中的函数
+
+
+# Vue.use(plugin)
+plugin如果是一个对象，必须提供install方法，如果plugin是一个函数，则会被作为install方法。plugin方法调用时，会将Vue作为参数传入。
+- Vue.use是官方提供给开发者的一个api，用来注册、安装类型Vuex、vue-router、ElementUI之类的插件
+- Vue.use方法主要做了两件事: 1.检查插件是否安装，如果安装了就不在安装 2. 如果没有安装，那么调用插件的install方法，并传入Vue实例
+1. 为什么引入Vue-Router、Vuex需要Vue.use(),而引入axios的不需要？
+  因为Vue-Router需要在install方法对Vue实例做一些自定义化的操作，比如在vue.prototype中添加 $router、$route属性。  而axios是基于Promise封装的库，是完全
+  独立于Vue的，根本不需要挂载Vue上也能实现发送请求。
+
+# defineProperty 定义的属性默认是不可枚举的。
+# delete 只能删除对象上的属性4444
